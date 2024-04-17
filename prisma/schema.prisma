@@ -1,0 +1,285 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum typeCourse {
+  COURS
+  EXERCICE
+  INFORMATION
+}
+
+enum typeExercise {
+  EXAM
+  PRACTICE
+  TRAINING
+}
+
+enum typeDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Course {
+  id        Int        @id @default(autoincrement())
+  type      typeCourse
+  title     String
+  subjectId Int
+  subject   Subject    @relation(fields: [subjectId], references: [id])
+
+  @@index([subjectId])
+}
+
+model User {
+  id                    String                 @id @default(cuid())
+  email                 String?                @unique
+  name                  String?
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole               @default(USER)
+  accounts              Account[]
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  video                 Video[]
+  userVideos            UserVideo[]
+  exercise              ExerciseDone[]
+  createdAt             DateTime               @default(now())
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
+model SubjectInPathway {
+  id        Int     @id @default(autoincrement())
+  subjectId Int
+  pathwayId Int
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  pathway   Pathway @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, pathwayId])
+  @@index([subjectId])
+  @@index([pathwayId])
+}
+
+model Subject {
+  id        Int                @id @default(autoincrement())
+  name      String // Mathématiques, Physique
+  pathways  SubjectInPathway[]
+  sections  SectionVideo[]
+  exercises Exercise[]
+  Video     Video[]
+  Course    Course[]
+  Conseil   Conseil[]
+}
+
+model Exercise {
+  id           Int            @id @default(autoincrement())
+  title        String
+  subjectId    Int
+  difficulty   typeDifficulty
+  type         typeExercise
+  questions    Question[]
+  subject      Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  ExerciseDone ExerciseDone[]
+
+  @@index(subjectId)
+}
+
+model Pathway {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  subjectInPathway SubjectInPathway[]
+  KeyDate          KeyDate[]
+}
+
+model Video {
+  id                Int           @id @default(autoincrement())
+  title             String
+  description       String?
+  youtubeUrl        String
+  subjectId         Int?
+  sectionId         Int?
+  subject           Subject?      @relation(fields: [subjectId], references: [id])
+  availableFromDate DateTime
+  User              User?         @relation(fields: [userId], references: [id])
+  userId            String?
+  UserVideo         UserVideo[]
+  SectionVideo      SectionVideo? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([subjectId])
+  @@index([userId])
+  @@index([sectionId])
+}
+
+// Permet de lier les vidéos vues par un utilisateur
+model UserVideo {
+  id      Int     @id @default(autoincrement())
+  userId  String
+  user    User    @relation(fields: [userId], references: [id])
+  videoId Int
+  video   Video   @relation(fields: [videoId], references: [id])
+  viewed  Boolean @default(false)
+
+  @@unique([userId, videoId])
+  @@index([userId])
+  @@index([videoId])
+}
+
+// Permet de lier les réponses d'un utilisateur à une question
+model ResponseSubmit {
+  id             Int          @id @default(autoincrement())
+  response       String
+  questionId     Int
+  question       Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  idExerciseDone Int
+  exerciseDone   ExerciseDone @relation(fields: [idExerciseDone], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@index([idExerciseDone])
+}
+
+model ExerciseDone {
+  id         Int              @id @default(autoincrement())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exerciseId Int
+  exercise   Exercise         @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  response   ResponseSubmit[]
+  note       Float
+  Date       DateTime         @default(now())
+  time       Int
+
+  @@index([userId])
+  @@index([exerciseId])
+}
+
+model Question {
+  id              Int              @id @default(autoincrement())
+  text            String           @db.Text
+  explanation     String?          @db.Text
+  exerciseId      Int
+  correctAnswerId String
+  exercise        Exercise         @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  question        ResponseSubmit[]
+  options         Option[]
+
+  @@index([exerciseId])
+}
+
+model Option {
+  id         Int      @id @default(autoincrement())
+  letter     String
+  text       String   @db.Text
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+}
+
+model Conseil {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [id])
+
+  @@index([subjectId])
+}
+
+model KeyDate {
+  id      Int      @id @default(autoincrement())
+  content String
+  date    DateTime
+  pathId  Int
+  pathway Pathway  @relation(fields: [pathId], references: [id])
+
+  @@index([pathId])
+}
+
+model File {
+  id   Int    @id @default(autoincrement())
+  name String
+  data Json
+}
+
+model SectionVideo {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  position    Int
+
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  video Video[]
+
+  @@index([subjectId])
+}
