@@ -19,6 +19,8 @@ const config = {
     },
     extend: {
       colors: {
+        rolexStart:'#0a3e27',
+        rolexEnd:'#196f48',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
