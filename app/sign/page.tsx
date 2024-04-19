@@ -7,7 +7,7 @@ import {RegisterCardForm} from "@/components/auth/register-card-form";
 export default function Sign() {
 
     return (
-        <div className="flex items-center justify-center pt-20">
+        <div className="flex items-center justify-center p-20">
             <Tabs defaultValue="sign-in" className="w-[400px]">
                 <TabsList className="w-full">
                     <TabsTrigger  className="w-full" value="sign-in">Connexion</TabsTrigger>

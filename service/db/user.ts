@@ -10,6 +10,17 @@ const UserService = {
         return db.user.findUnique({
             where: { id }
         });
+    },
+    getAdminEmails: async () => {
+        return  db.user.findMany({
+            where: {
+                role: "ADMIN",
+            },
+            select: {
+                email: true,
+            },
+        });
+
     }
 }
 

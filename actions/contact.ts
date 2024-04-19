@@ -2,7 +2,8 @@
 import * as z from "zod";
 import {ContactUsSchema} from "@/schemas";
 import {sendEmailToAdmin} from "@/lib/mail";
-import {getEmailAdmin} from "@/data/admin";
+import UserService from "@/service/db/user";
+import logger from "@/lib/logger";
 
 export const contactUs = async (
     values: z.infer<typeof ContactUsSchema>,
@@ -11,18 +12,19 @@ export const contactUs = async (
     if (!validatedFields.success) {
         return { error: "Invalid fields!" };
     }
-    // Add course to database
     try {
-        const email = await getEmailAdmin();
+        logger.info("Sending email to admin");
+        const email = await UserService.getAdminEmails();
         for (const e of email){
             if (e.email) {
                 await sendEmailToAdmin(e.email,JSON.stringify(values));
             }
         }
     } catch (e) {
+        logger.error("Error sending email"+e);
         console.error(e);
-        return { error: "Failed to add course!" + e };
+        return { error: "Erreur lors de l'envoie de l'email" + e };
     }
 
-    return { success: "Course added!" };
+    return { success: "Email envoyé!" };
 }

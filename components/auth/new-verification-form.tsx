@@ -50,7 +50,7 @@ export const NewVerificationForm = () => {
                         </div>
                     ),
                 })
-                router.push('/');
+                router.push('/sign');
 
             }
         })
