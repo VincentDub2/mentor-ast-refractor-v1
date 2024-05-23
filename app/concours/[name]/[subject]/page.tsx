@@ -1,9 +1,9 @@
 import VideosTab from "@/app/concours/[name]/[subject]/_components/video/video";
-import {getSubjectByNameAndNamePathway} from "@/data/subject";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
-import {TableListeExo} from "@/components/exercices/TableListeExo";
 import Accueil from "@/app/concours/[name]/[subject]/_components/accueil/Accueil";
 import {BreadcrumbSubject} from "@/app/concours/[name]/[subject]/_components/BreadcrumSubject";
+import {getSubjectByNameAndNamePathwayAction} from "@/actions/subject";
+import {TableListeExo} from "@/components/exercices/TableListeExo";
 
 export async function generateStaticParams() {
     const combiPath = [
@@ -27,7 +27,7 @@ export const dynamicParams = false
 
 export default async function PageSubject({ params }: { params: { name: string, subject: string }})
 {
-    const subjectObjet = await getSubjectByNameAndNamePathway(params.subject,params.name);
+    const subjectObjet = await getSubject(params)
     if (!subjectObjet) {
         return <div className="flex justify-center items-center text-xl">Subject not found</div>
     }
@@ -62,3 +62,10 @@ export default async function PageSubject({ params }: { params: { name: string, 
     );
 }
 
+async function getSubject(params: { name: string, subject: string }) {
+    const subjectFind = await getSubjectByNameAndNamePathwayAction(params.subject, params.name)
+    if ('error' in subjectFind) {
+        return null
+    }
+    return subjectFind
+}

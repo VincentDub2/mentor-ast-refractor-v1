@@ -13,8 +13,11 @@ import {RoleGate} from "@/components/auth/role-gate";
 import {
     DialogFormAddVideo
 } from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/DialogAddVideoForm";
-import {get_videos_by_section_with_cache} from "@/data/video";
 import {FileComponent} from "@/app/concours/[name]/[subject]/_components/video/_components/FileComponent";
+import {getSectionsBySubjectIdAction} from "@/actions/sectionVideo";
+import logger from "@/lib/logger";
+import {getVideosBySectionIdAction} from "@/actions/video";
+import {FaRegFilePdf} from "react-icons/fa";
 
 const file = [
     {title: 'Mathématique', description: 'Cours de mathématique', idSection: 1, position: 1},
@@ -31,7 +34,7 @@ interface SectionVideoProps {
 };
 
 export  default async function SectionVideo({title,description,idSection,position}: SectionVideoProps) {
-    const videoSection = await get_videos_by_section_with_cache(idSection);
+    const videoSection = await getVideoSection(idSection);
 
     return (
         <div>
@@ -43,9 +46,12 @@ export  default async function SectionVideo({title,description,idSection,positio
                            {title}
                     </h2>
                     {
-                        description && <p className="text-sm text-muted-foreground">
+                        description && <div className="flex justify-between">
+                            <p className="text-sm text-muted-foreground">
                             {description}
-                        </p>
+                            </p>
+                            <FaRegFilePdf size={16}/>
+                        </div>
                     }
                 </div>
                 </ContextMenuTrigger>
@@ -75,9 +81,6 @@ export  default async function SectionVideo({title,description,idSection,positio
                                             <div>Pas de video disponible pour le moment</div>
                                         )}
                                     </div>
-                                    <h2 className="text-2xl pb-4 font-semibold tracking-tight">
-                                        Fiche de cours
-                                    </h2>
                                     {
                                         /*
                                     <div className="flex space-x-8 pb-4">
@@ -119,5 +122,10 @@ export  default async function SectionVideo({title,description,idSection,positio
 
 
 async function getVideoSection(idSection: number){
-    return await get_videos_by_section_with_cache(idSection);
+    const videos = await getVideosBySectionIdAction(idSection);
+    if ('error' in videos) {
+        return [];
+    }
+    return videos;
+
 }

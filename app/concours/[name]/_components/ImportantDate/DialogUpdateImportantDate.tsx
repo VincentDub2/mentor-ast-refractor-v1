@@ -9,17 +9,15 @@ import {FormSuccess} from "@/components/form-success";
 import {useState, useTransition} from "react";
 import {useForm} from "react-hook-form";
 import * as z from "zod";
-import {ImportantDateSchema, VideoSchema} from "@/schemas";
+import {ImportantDateSchema} from "@/schemas";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {toast} from "@/components/ui/use-toast";
 import {GrFormCheckmark, GrFormClose} from "react-icons/gr";
-import {addVideoAction} from "@/actions/video";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {Calendar} from "@/components/ui/calendar";
-import {addImportantDate} from "@/data/importanteDate";
 import {addKeyDateAction, updateKeyDateAction} from "@/actions/keyDate";
 
 interface DialogAddImportantDateProps {

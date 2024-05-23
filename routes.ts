@@ -9,6 +9,7 @@ export const publicRoutes = [
     "/api/exercises/json",
     "/api/exercises",
     "/api/pathways",
+    "/api/exercises/1/picture",
     "/api/website"
 ];
 

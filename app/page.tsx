@@ -8,6 +8,7 @@ import PrepaPresentation2 from "@/components/presentation/PrepaPresentation";
 import CardPresentationAst2 from "@/components/presentation/CardPresentationAst2";
 import CardPresentationAst1 from "@/components/presentation/CardPresentationAst1";
 
+
 export default function Home() {
     const textPresentation = 'Mentor, votre prépa spécialisée dans la préparation aux concours d\'écoles de commerce via les Admissions sur Titre (AST), offre un accompagnement sur mesure réalisé par des étudiants pour des étudiants.Mentor propose une gamme variée de formations adaptées à chaque profil, des préparations intensives aux parcours personnalisés, afin de répondre au mieux aux attentes et objectifs de chacun. Notre mission est de vous préparer efficacement aux concours des grandes écoles de commerce, en mettant à votre disposition l\'expertise et l\'expérience de ceux qui ont réussi, pour garantir votre succès.'
     const footPresentation = (<>

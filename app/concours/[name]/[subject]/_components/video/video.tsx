@@ -1,12 +1,12 @@
 import SectionVideo from "@/app/concours/[name]/[subject]/_components/video/_components/SectionVideo";
 import TextPresentationVert from "@/components/presentation/TextPresentationVert";
-import {getSectionForSubject} from "@/data/sectionVideo";
 import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@/components/ui/context-menu";
 import {Dialog, DialogTrigger} from "@/components/ui/dialog";
 import {RoleGate} from "@/components/auth/role-gate";
 import {
     DialogFormSectionVideo
 } from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/DialogFormSectionVideo";
+import {getSectionsBySubjectIdAction} from "@/actions/sectionVideo";
 
 interface VideosTabParams {
     subjectId: number;
@@ -46,5 +46,9 @@ export default async function VideosTab({subjectId}: VideosTabParams) {
 
 
 async function getSectionsBySubjectId(subjectId: number){
-    return getSectionForSubject(subjectId);
+    const sections = await getSectionsBySubjectIdAction(subjectId);
+    if ('error' in sections) {
+        return [];
+    }
+    return sections;
 }

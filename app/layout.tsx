@@ -6,8 +6,6 @@ import {auth} from "@/auth";
 import {SessionProvider} from "next-auth/react";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import {Toaster} from "@/components/ui/toaster";
-import Head from "next/head";
-
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -16,7 +14,8 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Mentor",
-  description: "Reussir les concours d'écoles de commerce via les Admissions sur Titre (AST)"
+  description: "Reussir les concours d'écoles de commerce via les Admissions sur Titre (AST)",
+    icons : "favicon.ico",
 };
 
 export default async function RootLayout({
@@ -29,9 +28,6 @@ export default async function RootLayout({
   return (
       <SessionProvider session={session}>
           <html lang="en" suppressHydrationWarning>
-          <Head>
-              <link rel="icon" href="/favicon.ico" />
-          </Head>
           <body>
               <main
                   className={cn(
