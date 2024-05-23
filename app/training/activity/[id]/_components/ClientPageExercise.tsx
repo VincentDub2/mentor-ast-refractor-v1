@@ -14,6 +14,7 @@ import FormAddQuestion from "@/app/training/activity/[id]/_components/FormAddQue
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import {useRouter} from 'next/navigation'
 import {CldUploadButton, CldUploadWidget} from 'next-cloudinary';
+import Logger from "@/lib/logger";
 
 interface Answers {
     [key: number]: string;
@@ -37,8 +38,6 @@ export function TrainingPage(
     const user = useCurrentUser();
     const router = useRouter();
 
-
-
     useEffect(() => {
 
         const id = setInterval(() => {
@@ -49,17 +48,18 @@ export function TrainingPage(
         return () => clearInterval(id);
     }, []);
 
-    const handleAnswer = (questionId :number, answer : string) => {
-        setAnswers(currentAnswers => ({
-            ...currentAnswers,
-            [questionId]: answer
-        }));
-        // Mise à jour de la progression ici, si nécessaire
-        setProgress((currentProgress) => {
-            return  Math.min(currentProgress + (100 / questions.length), 100);
-        });
+    const handleAnswer = (questionId: number, answer: string) => {
+        setAnswers(currentAnswers => {
+            const updatedAnswers = {
+                ...currentAnswers,
+                [questionId]: answer
+            };
 
+            setProgress(Math.min(Object.keys(updatedAnswers).length * 100 / questions.length, 100));
+            return updatedAnswers;
+        });
     };
+
 
     function calculateNote() {
         let note = 0;
