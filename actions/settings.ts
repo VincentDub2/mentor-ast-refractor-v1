@@ -3,13 +3,12 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 
-import {unstable_update} from "@/auth";
 import db from "@/lib/db";
 import {SettingsSchema} from "@/schemas";
-import {getUserByEmail, getUserById} from "@/data/user";
 import {currentUser} from "@/lib/auth";
 import {generateVerificationToken} from "@/lib/tokens";
 import {sendVerificationEmail} from "@/lib/mail";
+import UserService from "@/service/db/user";
 
 
 export const settings = async (
@@ -21,7 +20,7 @@ export const settings = async (
     return { error: "Unauthorized" }
   }
 
-  const dbUser = await getUserById(user.id);
+  const dbUser = await UserService.getUserById(user.id ?? "");
 
   if (!dbUser) {
     return { error: "Unauthorized" }
@@ -35,7 +34,7 @@ export const settings = async (
   }
 
   if (values.email && values.email !== user.email) {
-    const existingUser = await getUserByEmail(values.email);
+    const existingUser = await UserService.getUserByEmail(values.email);
 
     if (existingUser && existingUser.id !== user.id) {
       return { error: "Email already in use!" }
@@ -77,14 +76,6 @@ export const settings = async (
     }
   });
 
-  unstable_update({
-    user: {
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
-      role: updatedUser.role,
-    }
-  });
 
   return { success: "Settings Updated!" }
 }

@@ -2,22 +2,66 @@
 
 import * as z from "zod";
 import {SubjectSchema} from "@/schemas";
-import {addSubject} from "@/data/subject";
+import SubjectService from "@/service/db/subject";
+import logger from "@/lib/logger";
+import {Subject} from "@prisma/client";
 
 export const addSubjectAction = async (
     values: z.infer<typeof SubjectSchema>,
     pathwayName: string,
 )=>{
+    logger.info(`Add subject with values ${values} and pathwayName ${pathwayName}`)
     const validatedFields = SubjectSchema.safeParse(values);
 
     if (!validatedFields.success) {
+        logger.error(`Invalid fields ${values}`)
         return { error: "Invalid fields!" };
     }
     try {
-        await addSubject(validatedFields.data.name,pathwayName)
+        await SubjectService.addSubject(validatedFields.data.name,pathwayName)
     } catch (error) {
+        if (error instanceof Error) {
+            logger.error(`Failed to add subject ${values}`)
+            return { error:error.message };
+        }
+        logger.error(`Failed to add subject ${values}`)
         return { error: "Failed to add subject!" };
     }
-
+    logger.info(`Subject added with values ${values} and pathwayName ${pathwayName}`)
     return { success: "Subject added!" };
+}
+
+export const getSubjectsByPathwayNameAction = async (pathwayName: string) => {
+    logger.info(`Get subjects with pathwayName ${pathwayName}`)
+    try {
+        return  await SubjectService.getSubjectsByPathwayName(pathwayName);
+    } catch (error) {
+        if (error instanceof Error) {
+            logger.error(`Failed to get subjects with pathwayName ${pathwayName}`)
+            return { error:error.message };
+        }
+        logger.error(`Failed to get subjects with pathwayName ${pathwayName}`)
+        return { error: "Failed to get subjects!" };
+    }
+}
+
+/**
+ * Get subject by name and pathway name
+ * @param subjectName
+ * @param pathwayName
+ * @returns {Promise<Subject | {error: string}>}
+ */
+
+export const getSubjectByNameAndNamePathwayAction = async (subjectName: string, pathwayName: string): Promise<Subject | {error: string}> => {
+    logger.info(`Get subject with subjectName ${subjectName} and pathwayName ${pathwayName}`)
+    try {
+        return await SubjectService.getSubjectByNameAndNamePathway(subjectName, pathwayName) ?? { error: "Subject not found!" };
+    } catch (error) {
+        if (error instanceof Error) {
+            logger.error(`Failed to get subject with subjectName ${subjectName} and pathwayName ${pathwayName}`)
+            return { error:error.message };
+        }
+        logger.error(`Failed to get subject with subjectName ${subjectName} and pathwayName ${pathwayName}`)
+        return { error: "Failed to get subject!" };
+    }
 }

@@ -19,7 +19,6 @@ import {cn} from "@/lib/utils";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {Calendar} from "@/components/ui/calendar";
-import {addImportantDate} from "@/data/importanteDate";
 import {addKeyDateAction} from "@/actions/keyDate";
 
 interface DialogAddImportantDateProps {

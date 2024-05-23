@@ -97,3 +97,18 @@ export const updateKeyDateAction = async (
     logger.info(`Important date updated with id ${id} and values ${values}`)
     return { success: "Subject added!" };
 }
+
+
+export const getKeyDatesByPathwayIdAction = async (pathId: number) => {
+    logger.info(`Get important dates with pathId ${pathId}`)
+    try {
+        return await ImportanteDateService.getImportantDateFromPath(pathId);
+    } catch (error) {
+        if (error instanceof Error) {
+            logger.error(`Failed to get important dates with pathId ${pathId}`)
+            return { error:error.message };
+        }
+        logger.error(`Failed to get important dates with pathId ${pathId}`)
+        return { error: "Failed to get subjects!" };
+    }
+}
