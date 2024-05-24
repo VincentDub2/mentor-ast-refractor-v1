@@ -13,8 +13,6 @@ import {RoleGate} from "@/components/auth/role-gate";
 import FormAddQuestion from "@/app/training/activity/[id]/_components/FormAddQuestion";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import {useRouter} from 'next/navigation'
-import {CldUploadButton, CldUploadWidget} from 'next-cloudinary';
-import Logger from "@/lib/logger";
 
 interface Answers {
     [key: number]: string;
@@ -23,7 +21,12 @@ interface Answers {
 interface TrainingPageProps {
     ExerciseComplete : ExerciseComplete;
     ExerciseId: number
+}
 
+export interface CloudinaryResponse {
+    public_id: string;
+    secure_url: string;
+    info: any;
 }
 
 
@@ -37,6 +40,7 @@ export function TrainingPage(
     const [answers, setAnswers] = useState<Answers>({});
     const user = useCurrentUser();
     const router = useRouter();
+
 
     useEffect(() => {
 
@@ -118,18 +122,8 @@ export function TrainingPage(
         });
     }
 
-
     return (
         <div className="flex flex-col min-h-screen">
-            <CldUploadWidget signatureEndpoint="<API Endpoint (ex: /api/sign-cloudinary-params)>">
-                {({ open }) => {
-                    return (
-                        <button onClick={() => open()}>
-                            Upload an Image
-                        </button>
-                    );
-                }}
-            </CldUploadWidget>
             <QcmNavBar progress={progress}/>
             <div className="flex-grow">
                 <div className="flex flex-col justify-center items-stretch gap-4 m-4">
@@ -142,6 +136,7 @@ export function TrainingPage(
                                                    correctAnswerId={question.correctAnswerId}
                                                    modeCorrection={false}
                                                    questionId={question.id}
+                                                   image={question.ImageUrl}
                                                    explication={question.explanation ?? ""}
                                 />
                             )
