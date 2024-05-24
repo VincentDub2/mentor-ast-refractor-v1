@@ -12,6 +12,10 @@ import {RoleGate} from "@/components/auth/role-gate";
 import FormAddQuestion from "@/app/training/activity/[id]/_components/FormAddQuestion";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 
+/*
+This component isn't used anymore, it has been replaced by the component in the same folder
+ */
+
 interface Answers {
     [key: number]: string;
 }
@@ -86,6 +90,7 @@ export function TrainingPage(
                                                    onAnswer={handleAnswer}
                                                    correctAnswerId={question.correctAnswerId}
                                                    modeCorrection={false}
+                                                    image={question.ImageUrl}
                                                    questionId={question.id}
                                                    explication={question.explanation ?? ""}
                                 />
