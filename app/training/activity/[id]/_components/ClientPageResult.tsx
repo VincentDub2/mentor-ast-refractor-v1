@@ -36,6 +36,7 @@ export function ResultClientPage(params: ResultClientPageProps) {
                                                        onAnswer={()=>{}}
                                                        correctAnswerId={question.correctAnswerId}
                                                        modeCorrection={true}
+                                                       image={question.ImageUrl}
                                                        userAnswers={params.userAnswers.find((userAnswer) => userAnswer.questionId === question.id)?.response}
                                                        questionId={question.id}
                                                        explication={question.explanation ?? ""}

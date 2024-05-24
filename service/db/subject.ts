@@ -121,6 +121,38 @@ const SubjectService = {
             revalidateTag('subject');
         }
 
+    },
+
+    /**
+     *Get the subject of an exercise
+     * @param exerciseId
+     */
+    getSubjectFromExercise : async (exerciseId : number) => {
+        const res = await db.exercise.findUnique({
+            where: {
+                id: exerciseId
+            },
+            include: {
+                subject: true
+            }
+        });
+        return res?.subject;
+    },
+    getPathwayFromSubject : async (subjectId : number) => {
+        const res = await db.subject.findUnique({
+            where: {
+                id: subjectId
+            },
+            include: {
+                pathways: true
+            }
+        });
+
+        return db.pathway.findUnique({
+            where: {
+                id: res?.pathways[0].pathwayId
+            }
+        });
     }
 }
 
