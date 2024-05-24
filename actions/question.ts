@@ -41,3 +41,32 @@ export const deleteQuestionAction = async (questionId: number) => {
         return { error: "Failed to delete question!" + error };
     }
 }
+
+/**
+ * add a picture to a question
+ * @param questionId
+ * @param image string
+ */
+export const addImageToQuestionAction = async (questionId: number,image: string) => {
+    try {
+        logger.info(`Add image to question with id ${questionId}`)
+        await QuestionService.addImageToQuestion(questionId, image);
+    } catch (error) {
+        logger.error(`Failed to add image to question with id ${questionId}`)
+        return {error: "Failed to add image to question!" + error};
+    }
+}
+
+/**
+ * Delete a picture from a question
+ * @param questionId
+ */
+export const deleteImageToQuestionAction = async (questionId: number) => {
+    try {
+        logger.info(`Delete image to question with id ${questionId}`)
+        await QuestionService.deleteImageToQuestion(questionId);
+    } catch (error) {
+        logger.error(`Failed to delete image to question with id ${questionId}`)
+        return {error: "Failed to delete image to question!" + error};
+    }
+}
