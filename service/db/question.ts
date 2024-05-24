@@ -112,7 +112,6 @@ const QuestionService = {
             revalidateTag('OneExercise');
         }
     }
-
 }
 
 export default QuestionService;

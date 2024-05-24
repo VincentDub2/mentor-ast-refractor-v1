@@ -13,6 +13,11 @@ import {RoleGate} from "@/components/auth/role-gate";
 import FormAddQuestion from "@/app/training/activity/[id]/_components/FormAddQuestion";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import {useRouter} from 'next/navigation'
+import {BiMath} from "react-icons/bi";
+import {Pathway, Subject} from "@prisma/client";
+import {FaFlagUsa} from "react-icons/fa";
+import {GiBookmarklet} from "react-icons/gi";
+import {TbBulb} from "react-icons/tb";
 
 interface Answers {
     [key: number]: string;
@@ -21,13 +26,10 @@ interface Answers {
 interface TrainingPageProps {
     ExerciseComplete : ExerciseComplete;
     ExerciseId: number
+    Subject: Subject
+    Pathway: Pathway
 }
 
-export interface CloudinaryResponse {
-    public_id: string;
-    secure_url: string;
-    info: any;
-}
 
 
 export function TrainingPage(
@@ -73,6 +75,24 @@ export function TrainingPage(
             }
         });
         return note;
+    }
+
+    /**
+     * This fonction return the right icons based on the subject name
+     */
+    function getIconSubject() {
+        switch (params.Subject.name) {
+            case "math":
+                return BiMath;
+            case "anglais":
+                return FaFlagUsa
+            case "français":
+                return GiBookmarklet
+            case "logique":
+                return TbBulb
+            default:
+                return BiMath;
+        }
     }
 
 
@@ -124,7 +144,7 @@ export function TrainingPage(
 
     return (
         <div className="flex flex-col min-h-screen">
-            <QcmNavBar progress={progress}/>
+            <QcmNavBar progress={progress} nameSubj={params.Subject.name} iconSubj={getIconSubject()} pathName={params.Pathway.name}/>
             <div className="flex-grow">
                 <div className="flex flex-col justify-center items-stretch gap-4 m-4">
                     {

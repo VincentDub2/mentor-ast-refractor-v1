@@ -7,13 +7,19 @@ import {Progress} from "@/components/ui/progress";
 import {ImCross} from "react-icons/im";
 import {BiMath} from "react-icons/bi";
 import Timer from "@/app/training/activity/[id]/_components/Timer";
+import {IconType} from "react-icons";
+import subject from "@/service/db/subject";
 
 
 interface QcmNavBarProps {
     progress: number;
+    iconSubj: IconType;
+    nameSubj: string;
+    pathName: string;
 }
+
 export const QcmNavBar : React.FC<QcmNavBarProps> = (
-    { progress }
+    { progress,iconSubj: IconSubj, nameSubj ,pathName}
     ) => {
     const [hidden, setHidden] = useState(false);
     const { scrollY } = useScroll();
@@ -59,12 +65,14 @@ export const QcmNavBar : React.FC<QcmNavBarProps> = (
             pl-2
             flex-1 space-x-8 flex justify-start">
                 {/* Liens de navigation à gauche */}
+                <Link href={`/concours/${pathName}/${nameSubj}`}>
                 <div className="flex items-center p-1 hover:text-gray-300">
-                    <BiMath/>
+                    <IconSubj />
                     <p className="hidden lg:inline-block px-2 py-1 hover:text-gray-300">
-                        Math
+                        {nameSubj}
                     </p>
                 </div>
+            </Link>
             </div>
             <Progress className="w-3/5" value={progress}/>
             <div className="
