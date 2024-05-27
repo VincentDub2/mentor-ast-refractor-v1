@@ -13,7 +13,11 @@ import {RoleGate} from "@/components/auth/role-gate";
 import FormAddQuestion from "@/app/training/activity/[id]/_components/FormAddQuestion";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import {useRouter} from 'next/navigation'
-import {CldUploadButton, CldUploadWidget} from 'next-cloudinary';
+import {BiMath} from "react-icons/bi";
+import {Pathway, Subject} from "@prisma/client";
+import {FaFlagUsa} from "react-icons/fa";
+import {GiBookmarklet} from "react-icons/gi";
+import {TbBulb} from "react-icons/tb";
 
 interface Answers {
     [key: number]: string;
@@ -22,8 +26,10 @@ interface Answers {
 interface TrainingPageProps {
     ExerciseComplete : ExerciseComplete;
     ExerciseId: number
-
+    Subject: Subject
+    Pathway: Pathway
 }
+
 
 
 export function TrainingPage(
@@ -38,7 +44,6 @@ export function TrainingPage(
     const router = useRouter();
 
 
-
     useEffect(() => {
 
         const id = setInterval(() => {
@@ -49,17 +54,18 @@ export function TrainingPage(
         return () => clearInterval(id);
     }, []);
 
-    const handleAnswer = (questionId :number, answer : string) => {
-        setAnswers(currentAnswers => ({
-            ...currentAnswers,
-            [questionId]: answer
-        }));
-        // Mise à jour de la progression ici, si nécessaire
-        setProgress((currentProgress) => {
-            return  Math.min(currentProgress + (100 / questions.length), 100);
-        });
+    const handleAnswer = (questionId: number, answer: string) => {
+        setAnswers(currentAnswers => {
+            const updatedAnswers = {
+                ...currentAnswers,
+                [questionId]: answer
+            };
 
+            setProgress(Math.min(Object.keys(updatedAnswers).length * 100 / questions.length, 100));
+            return updatedAnswers;
+        });
     };
+
 
     function calculateNote() {
         let note = 0;
@@ -69,6 +75,24 @@ export function TrainingPage(
             }
         });
         return note;
+    }
+
+    /**
+     * This fonction return the right icons based on the subject name
+     */
+    function getIconSubject() {
+        switch (params.Subject.name) {
+            case "math":
+                return BiMath;
+            case "anglais":
+                return FaFlagUsa
+            case "français":
+                return GiBookmarklet
+            case "logique":
+                return TbBulb
+            default:
+                return BiMath;
+        }
     }
 
 
@@ -118,19 +142,9 @@ export function TrainingPage(
         });
     }
 
-
     return (
         <div className="flex flex-col min-h-screen">
-            <CldUploadWidget signatureEndpoint="<API Endpoint (ex: /api/sign-cloudinary-params)>">
-                {({ open }) => {
-                    return (
-                        <button onClick={() => open()}>
-                            Upload an Image
-                        </button>
-                    );
-                }}
-            </CldUploadWidget>
-            <QcmNavBar progress={progress}/>
+            <QcmNavBar progress={progress} nameSubj={params.Subject.name} iconSubj={getIconSubject()} pathName={params.Pathway.name}/>
             <div className="flex-grow">
                 <div className="flex flex-col justify-center items-stretch gap-4 m-4">
                     {
@@ -142,6 +156,7 @@ export function TrainingPage(
                                                    correctAnswerId={question.correctAnswerId}
                                                    modeCorrection={false}
                                                    questionId={question.id}
+                                                   image={question.ImageUrl}
                                                    explication={question.explanation ?? ""}
                                 />
                             )

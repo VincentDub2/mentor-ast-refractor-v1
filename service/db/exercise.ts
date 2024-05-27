@@ -194,7 +194,22 @@ const ExerciseService = {
         {
             tags: [`ResponseSubmit`],
         }
-    )
+    ),
+    /**
+     *Get the subject of an exercise
+     * @param exerciseId
+     */
+    getSubjectFromExercise : async (exerciseId : number) => {
+       const res = await db.exercise.findUnique({
+            where: {
+                id: exerciseId
+            },
+            include: {
+                subject: true
+            }
+        });
+       return res?.subject;
+    }
 
 
 }

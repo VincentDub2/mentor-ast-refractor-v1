@@ -65,3 +65,35 @@ export const getSubjectByNameAndNamePathwayAction = async (subjectName: string, 
         return { error: "Failed to get subject!" };
     }
 }
+
+export const getSubjectFromExerciseAction = async (exerciseId: number): Promise<Subject | {error: string}> => {
+    logger.info(`Get subject with exerciseId ${exerciseId}`)
+    try {
+        return await SubjectService.getSubjectFromExercise(exerciseId) ?? { error: "Subject not found!" };
+    } catch (error) {
+        if (error instanceof Error) {
+            logger.error(`Failed to get subject with exerciseId ${exerciseId}`)
+            return { error:error.message };
+        }
+        logger.error(`Failed to get subject with exerciseId ${exerciseId}`)
+        return { error: "Failed to get subject!" };
+    }
+}
+
+/**
+ * Get pathway by subject id
+ * @param subjectId
+ */
+export const getPathwayFromSubjectAction = async (subjectId: number) => {
+    logger.info(`Get pathway with subjectId ${subjectId}`)
+    try {
+        return await SubjectService.getPathwayFromSubject(subjectId) ?? {error: "Pathway not found!"};
+    } catch (error) {
+        if (error instanceof Error) {
+            logger.error(`Failed to get pathway with subjectId ${subjectId}`)
+            return {error: error.message};
+        }
+        logger.error(`Failed to get pathway with subjectId ${subjectId}`)
+        return {error: "Failed to get pathway!"};
+    }
+}

@@ -77,8 +77,41 @@ const QuestionService = {
         }finally {
             revalidateTag('OneExercise');
         }
+    },
+    addImageToQuestion : async (questionId: number, image: string) => {
+        try {
+            await db.question.update({
+                where: {
+                    id: questionId
+                },
+                data: {
+                    ImageUrl: image
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            throw new Error("We can't update this question : " + error);
+        }finally {
+            revalidateTag('OneExercise');
+        }
+    },
+    deleteImageToQuestion : async (questionId: number) => {
+        try {
+            await db.question.update({
+                where: {
+                    id: questionId
+                },
+                data: {
+                    ImageUrl: null
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            throw new Error("We can't update this question : " + error);
+        }finally {
+            revalidateTag('OneExercise');
+        }
     }
-
 }
 
 export default QuestionService;

@@ -11,6 +11,11 @@ import {QuestionComplete} from "@/type/model";
 import {RoleGate} from "@/components/auth/role-gate";
 import FormAddQuestion from "@/app/training/activity/[id]/_components/FormAddQuestion";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
+import {BiMath} from "react-icons/bi";
+
+/*
+This component isn't used anymore, it has been replaced by the component in the same folder
+ */
 
 interface Answers {
     [key: number]: string;
@@ -73,9 +78,11 @@ export function TrainingPage(
         })
     }
 
+
+
     return (
         <div className="flex flex-col min-h-screen">
-            <QcmNavBar progress={progress}/>
+            <QcmNavBar progress={progress} iconSubj={BiMath} nameSubj={"math"} pathName={"ast1"}/>
             <div className="flex-grow">
                 <div className="flex flex-col justify-center items-stretch gap-4 m-4">
                     {
@@ -86,6 +93,7 @@ export function TrainingPage(
                                                    onAnswer={handleAnswer}
                                                    correctAnswerId={question.correctAnswerId}
                                                    modeCorrection={false}
+                                                    image={question.ImageUrl}
                                                    questionId={question.id}
                                                    explication={question.explanation ?? ""}
                                 />
