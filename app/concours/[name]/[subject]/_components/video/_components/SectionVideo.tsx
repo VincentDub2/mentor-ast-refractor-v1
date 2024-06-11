@@ -13,9 +13,6 @@ import {RoleGate} from "@/components/auth/role-gate";
 import {
     DialogFormAddVideo
 } from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/DialogAddVideoForm";
-import {FileComponent} from "@/app/concours/[name]/[subject]/_components/video/_components/FileComponent";
-import {getSectionsBySubjectIdAction} from "@/actions/sectionVideo";
-import logger from "@/lib/logger";
 import {getVideosBySectionIdAction} from "@/actions/video";
 import {FaRegFilePdf} from "react-icons/fa";
 
@@ -50,7 +47,9 @@ export  default async function SectionVideo({title,description,idSection,positio
                             <p className="text-sm text-muted-foreground">
                             {description}
                             </p>
-                            <FaRegFilePdf size={16}/>
+                            <a href={`https://res.cloudinary.com/dpdacmw9k/image/upload/v1717991433/v3wldgihsjpyldvvqsay.pdf`} target="_blank">
+                                <FaRegFilePdf size={16}/>
+                            </a>
                         </div>
                     }
                 </div>
