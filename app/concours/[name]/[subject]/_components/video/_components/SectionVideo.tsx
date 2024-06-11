@@ -16,19 +16,13 @@ import {
 import {getVideosBySectionIdAction} from "@/actions/video";
 import {FaRegFilePdf} from "react-icons/fa";
 
-const file = [
-    {title: 'Mathématique', description: 'Cours de mathématique', idSection: 1, position: 1},
-    {title: 'Français', description: 'Cours de français', idSection: 2, position: 2},
-    {title: 'Anglais', description: 'Cours d\'anglais', idSection: 3, position: 3},
-    {title: 'Logique', description: 'Cours de logique', idSection: 4, position: 4},
-];
 
 interface SectionVideoProps {
     title : string;
     description: string;
     idSection: number;
     position: number;
-};
+}
 
 export  default async function SectionVideo({title,description,idSection,position}: SectionVideoProps) {
     const videoSection = await getVideoSection(idSection);
