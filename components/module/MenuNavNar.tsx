@@ -25,7 +25,7 @@ function MenuNavNar() {
                   </p>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {
                         session ? (
