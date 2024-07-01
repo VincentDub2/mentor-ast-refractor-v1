@@ -20,15 +20,14 @@ export default async function VideosTab({subjectId}: VideosTabParams) {
         <Dialog>
             <ContextMenu>
                 <ContextMenuTrigger>
-            <div className="p-6">
-                <TextPresentationVert Header={"Les vidéos"} Text={"Retrouvez ici les vidéos pour vous aider à mieux comprendre les notions."}/>
+                    <TextPresentationVert Header={"Les vidéos"} Text={"Retrouvez ici les vidéos pour vous aider à mieux comprendre les notions."}/>
                     {
                         sections.map((section, index) => {
                             return <SectionVideo key={index} title={section.name} description={section.description} idSection={section.id} position={section.position}/>
                         })
                     }
-            </div>
-            </ContextMenuTrigger>
+
+                </ContextMenuTrigger>
                 <RoleGate allowedRole={"ADMIN"}>
                     <ContextMenuContent>
                         <DialogTrigger asChild>

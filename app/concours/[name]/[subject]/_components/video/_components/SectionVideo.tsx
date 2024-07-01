@@ -28,7 +28,7 @@ export  default async function SectionVideo({title,description,idSection,positio
     const videoSection = await getVideoSection(idSection);
 
     return (
-        <div>
+        <div className="px-6">
             <Dialog>
                 <ContextMenu>
                 <ContextMenuTrigger>
@@ -41,9 +41,13 @@ export  default async function SectionVideo({title,description,idSection,positio
                             <p className="text-sm text-muted-foreground">
                             {description}
                             </p>
+
+
                             <a href={`https://res.cloudinary.com/dpdacmw9k/image/upload/v1717991433/v3wldgihsjpyldvvqsay.pdf`} target="_blank">
                                 <FaRegFilePdf size={16}/>
                             </a>
+
+
                         </div>
                     }
                 </div>
@@ -74,24 +78,6 @@ export  default async function SectionVideo({title,description,idSection,positio
                                             <div>Pas de video disponible pour le moment</div>
                                         )}
                                     </div>
-                                    {
-                                        /*
-                                    <div className="flex space-x-8 pb-4">
-                                        {file.map((file) => (
-                                            <FileComponent
-                                                key={file.title}
-                                                file={file}
-                                                className="w-[80px]"
-                                                aspectRatio="portrait"
-                                                width={60}
-                                                height={80}
-                                                seen={true}
-                                            />
-                                        ))}
-                                    </div>
-                                    
-                                         */
-                                    }
                                 </ContextMenuTrigger>
                                 <RoleGate allowedRole={"ADMIN"}>
                                     <ContextMenuContent>

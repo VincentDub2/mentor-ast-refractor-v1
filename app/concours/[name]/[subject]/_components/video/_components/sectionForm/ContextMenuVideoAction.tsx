@@ -13,7 +13,6 @@ interface ContextMenuSectionActionProps {
 }
 
 export function ContextMenuVideoAction({title, idVideo}: ContextMenuSectionActionProps) {
-
     const onDelete = () => {
         startTransition(() => {
             deleteVideoAction(idVideo).then((data) => {
