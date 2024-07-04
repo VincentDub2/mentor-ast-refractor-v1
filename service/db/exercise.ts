@@ -3,8 +3,7 @@ import {revalidateTag, unstable_cache} from "next/cache";
 import {SubmitAnswer} from "@/type/model";
 import {ExerciseSchema} from "@/schemas";
 import * as z from "zod";
-import {Prisma, PrismaPromise} from "@prisma/client";
-import {DefaultArgs, GetFindResult} from "@prisma/client/runtime/binary";
+
 
 const ExerciseService = {
     getExerciseFromSubject : unstable_cache(
@@ -123,13 +122,7 @@ const ExerciseService = {
      * @param subjectId
      * @param UserId
      */
-    getExerciseFromSubjectNoCache : async (subjectId: number,UserId?:string) : Promise<PrismaPromise<GetFindResult<Prisma.$ExercisePayload<DefaultArgs>, {
-        include: {
-            ExerciseDone: { orderBy: { Date: string }; where: { userId: string | undefined } };
-            _count: { select: { questions: boolean } }
-        };
-        where: { subjectId: number }
-    }>[]>> => {
+    getExerciseFromSubjectNoCache : async (subjectId: number,UserId?:string) => {
             return db.exercise.findMany({
                 where: {
                     subjectId,
