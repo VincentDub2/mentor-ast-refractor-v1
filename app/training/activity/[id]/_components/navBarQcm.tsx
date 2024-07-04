@@ -5,10 +5,9 @@ import {motion, useMotionValueEvent, useScroll} from "framer-motion";
 import {FaClock} from "react-icons/fa";
 import {Progress} from "@/components/ui/progress";
 import {ImCross} from "react-icons/im";
-import {BiMath} from "react-icons/bi";
 import Timer from "@/app/training/activity/[id]/_components/Timer";
 import {IconType} from "react-icons";
-import subject from "@/service/db/subject";
+
 
 
 interface QcmNavBarProps {
