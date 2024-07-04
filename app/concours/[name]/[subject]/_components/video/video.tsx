@@ -8,6 +8,7 @@ import {
 } from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/DialogFormSectionVideo";
 import {getSectionsBySubjectIdAction} from "@/actions/sectionVideo";
 
+
 interface VideosTabParams {
     subjectId: number;
 }
@@ -20,15 +21,14 @@ export default async function VideosTab({subjectId}: VideosTabParams) {
         <Dialog>
             <ContextMenu>
                 <ContextMenuTrigger>
-            <div className="p-6">
-                <TextPresentationVert Header={"Les vidéos"} Text={"Retrouvez ici les vidéos pour vous aider à mieux comprendre les notions."}/>
+                    <TextPresentationVert Header={"Les vidéos"} Text={"Retrouvez ici les vidéos pour vous aider à mieux comprendre les notions."}/>
                     {
                         sections.map((section, index) => {
-                            return <SectionVideo key={index} title={section.name} description={section.description} idSection={section.id} position={section.position}/>
+                            return <SectionVideo key={index} title={section.name} description={section.description} idSection={section.id} position={section.position} pdf={section.pdf}/>
                         })
                     }
-            </div>
-            </ContextMenuTrigger>
+
+                </ContextMenuTrigger>
                 <RoleGate allowedRole={"ADMIN"}>
                     <ContextMenuContent>
                         <DialogTrigger asChild>

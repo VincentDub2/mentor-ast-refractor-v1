@@ -13,48 +13,61 @@ import {RoleGate} from "@/components/auth/role-gate";
 import {
     DialogFormAddVideo
 } from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/DialogAddVideoForm";
-import {FileComponent} from "@/app/concours/[name]/[subject]/_components/video/_components/FileComponent";
-import {getSectionsBySubjectIdAction} from "@/actions/sectionVideo";
-import logger from "@/lib/logger";
 import {getVideosBySectionIdAction} from "@/actions/video";
 import {FaRegFilePdf} from "react-icons/fa";
+import DialogAddPdf from "@/app/concours/[name]/[subject]/_components/video/_components/pdfUpload/DialogAddPdf";
+import IconDeletePdf from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/IconDeletePdf";
 
-const file = [
-    {title: 'Mathématique', description: 'Cours de mathématique', idSection: 1, position: 1},
-    {title: 'Français', description: 'Cours de français', idSection: 2, position: 2},
-    {title: 'Anglais', description: 'Cours d\'anglais', idSection: 3, position: 3},
-    {title: 'Logique', description: 'Cours de logique', idSection: 4, position: 4},
-];
 
 interface SectionVideoProps {
     title : string;
     description: string;
     idSection: number;
+    pdf: string | null;
     position: number;
-};
+}
 
-export  default async function SectionVideo({title,description,idSection,position}: SectionVideoProps) {
+export  default async function SectionVideo({title,description,idSection,position,pdf}: SectionVideoProps) {
     const videoSection = await getVideoSection(idSection);
 
+
+
     return (
-        <div>
+        <div className="px-6">
             <Dialog>
                 <ContextMenu>
-                <ContextMenuTrigger>
-                <div className="mt-6 space-y-1">
-                    <h2 className="text-2xl font-semibold tracking-tight">
-                           {title}
-                    </h2>
-                    {
-                        description && <div className="flex justify-between">
-                            <p className="text-sm text-muted-foreground">
-                            {description}
-                            </p>
-                            <FaRegFilePdf size={16}/>
-                        </div>
-                    }
-                </div>
-                </ContextMenuTrigger>
+                    <ContextMenuTrigger>
+                    <div className="mt-6 space-y-1">
+                        <h2 className="text-2xl font-semibold tracking-tight">
+                               {title}
+                        </h2>
+                        {
+                            description && <div className="flex justify-between">
+                                <p className="text-sm text-muted-foreground">
+                                {description}
+                                </p>
+
+
+                                <div className="flex flex-row space-x-4">
+
+                                    {
+                                        pdf &&
+                                        <a href={pdf}
+                                           target="_blank">
+                                            <FaRegFilePdf size={16}/>
+                                        </a>
+                                    }
+
+                                    <RoleGate allowedRole={"ADMIN"}>
+                                        {
+                                            pdf ? <IconDeletePdf fileUrl={pdf} sectionId={idSection}/>: <DialogAddPdf sectionId={idSection}/>
+                                        }
+                                    </RoleGate>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    </ContextMenuTrigger>
                     <ContextMenuSectionAction title={title} idSection={idSection}/>
                 </ContextMenu>
                 <DialogUpdateFormSectionVideo sectionId={idSection} name={title} description={description} position={position}/>
@@ -81,24 +94,6 @@ export  default async function SectionVideo({title,description,idSection,positio
                                             <div>Pas de video disponible pour le moment</div>
                                         )}
                                     </div>
-                                    {
-                                        /*
-                                    <div className="flex space-x-8 pb-4">
-                                        {file.map((file) => (
-                                            <FileComponent
-                                                key={file.title}
-                                                file={file}
-                                                className="w-[80px]"
-                                                aspectRatio="portrait"
-                                                width={60}
-                                                height={80}
-                                                seen={true}
-                                            />
-                                        ))}
-                                    </div>
-                                    
-                                         */
-                                    }
                                 </ContextMenuTrigger>
                                 <RoleGate allowedRole={"ADMIN"}>
                                     <ContextMenuContent>

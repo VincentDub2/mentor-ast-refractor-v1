@@ -272,10 +272,11 @@ model File {
 }
 
 model SectionVideo {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String
   position    Int
+  pdf         String?
 
   subjectId Int
   subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
