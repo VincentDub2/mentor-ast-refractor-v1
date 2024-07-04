@@ -47,20 +47,17 @@ export function ContextMenuSectionAction({title, idSection}: ContextMenuSectionA
             });
         });
     }
+
+
     return (
         <ContextMenuContent>
             <ContextMenuItem onClick={onDelete}>
                 Supprimer la section {title}
-          </ContextMenuItem>
+            </ContextMenuItem>
+
             <DialogTrigger asChild>
                 <ContextMenuItem>Modifier la section {title}</ContextMenuItem>
             </DialogTrigger>
-            <ContextMenuItem onClick={()=>{}}>
-                Ajouter la fiche de la section {title}
-            </ContextMenuItem>
-            <ContextMenuItem onClick={()=>{}}>
-                Supprimer la fiches de la section {title}
-            </ContextMenuItem>
-      </ContextMenuContent>
-  );
+        </ContextMenuContent>
+    );
 }
