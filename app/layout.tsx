@@ -14,7 +14,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Mentor",
-  description: "Reussir les concours d'écoles de commerce via les Admissions sur Titre (AST)",
+  description: "Réussir les concours d'écoles de commerce via les Admissions sur Titre (AST)",
     icons : "favicon.ico",
 };
 
