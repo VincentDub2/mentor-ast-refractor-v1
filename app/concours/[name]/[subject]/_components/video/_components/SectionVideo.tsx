@@ -15,43 +15,59 @@ import {
 } from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/DialogAddVideoForm";
 import {getVideosBySectionIdAction} from "@/actions/video";
 import {FaRegFilePdf} from "react-icons/fa";
+import DialogAddPdf from "@/app/concours/[name]/[subject]/_components/video/_components/pdfUpload/DialogAddPdf";
+import IconDeletePdf from "@/app/concours/[name]/[subject]/_components/video/_components/sectionForm/IconDeletePdf";
 
 
 interface SectionVideoProps {
     title : string;
     description: string;
     idSection: number;
+    pdf: string | null;
     position: number;
 }
 
-export  default async function SectionVideo({title,description,idSection,position}: SectionVideoProps) {
+export  default async function SectionVideo({title,description,idSection,position,pdf}: SectionVideoProps) {
     const videoSection = await getVideoSection(idSection);
+
+
 
     return (
         <div className="px-6">
             <Dialog>
                 <ContextMenu>
-                <ContextMenuTrigger>
-                <div className="mt-6 space-y-1">
-                    <h2 className="text-2xl font-semibold tracking-tight">
-                           {title}
-                    </h2>
-                    {
-                        description && <div className="flex justify-between">
-                            <p className="text-sm text-muted-foreground">
-                            {description}
-                            </p>
+                    <ContextMenuTrigger>
+                    <div className="mt-6 space-y-1">
+                        <h2 className="text-2xl font-semibold tracking-tight">
+                               {title}
+                        </h2>
+                        {
+                            description && <div className="flex justify-between">
+                                <p className="text-sm text-muted-foreground">
+                                {description}
+                                </p>
 
 
-                            <a href={`https://res.cloudinary.com/dpdacmw9k/image/upload/v1717991433/v3wldgihsjpyldvvqsay.pdf`} target="_blank">
-                                <FaRegFilePdf size={16}/>
-                            </a>
+                                <div className="flex flex-row space-x-4">
 
+                                    {
+                                        pdf &&
+                                        <a href={pdf}
+                                           target="_blank">
+                                            <FaRegFilePdf size={16}/>
+                                        </a>
+                                    }
 
-                        </div>
-                    }
-                </div>
-                </ContextMenuTrigger>
+                                    <RoleGate allowedRole={"ADMIN"}>
+                                        {
+                                            pdf ? <IconDeletePdf fileUrl={pdf} sectionId={idSection}/>: <DialogAddPdf sectionId={idSection}/>
+                                        }
+                                    </RoleGate>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    </ContextMenuTrigger>
                     <ContextMenuSectionAction title={title} idSection={idSection}/>
                 </ContextMenu>
                 <DialogUpdateFormSectionVideo sectionId={idSection} name={title} description={description} position={position}/>
