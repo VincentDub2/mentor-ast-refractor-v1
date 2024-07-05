@@ -1,9 +1,10 @@
 import {Card, CardContent, CardHeader, CardTitle,} from "@/components/ui/card"
+import Image from "next/image";
 
 interface SubjectContainerProps {
     name: string;
     className?: string;
-    reactIcon: React.ReactNode;
+    url: string;
 }
 
 
@@ -14,7 +15,13 @@ function SubjectContainer(props: SubjectContainerProps){
                 <CardTitle className="font-garamond-bold text-grey-900 text-2xl text-center">{props.name}</CardTitle>
             </CardHeader>
             <CardContent className="flex justify-center items-center">
-                {props.reactIcon}
+                <Image
+                    src={`${props.url}`}
+                    width={90}
+                    height={90}
+                    alt={"logo math"}
+                    className="-translate-y-4"
+                />
             </CardContent>
         </Card>
     );
