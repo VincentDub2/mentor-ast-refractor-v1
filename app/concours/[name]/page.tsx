@@ -2,14 +2,11 @@ import TextPresentationVert from "@/components/presentation/TextPresentationVert
 import Link from "next/link";
 import SubjectContainer from "@/app/concours/[name]/_components/subjectContainer";
 import {auth} from "@/auth";
-import {GiBookmarklet} from "react-icons/gi";
-import {BiMath} from "react-icons/bi";
-import {FaFlagUsa} from "react-icons/fa";
-import {TbBulb} from "react-icons/tb";
 import ImportantDates from "@/app/concours/[name]/_components/ImportantDate/ImportantDates";
 import MotDuJour from "@/app/concours/[name]/_components/CardMotDuJour";
 import {getSubjectsByPathwayNameAction} from "@/actions/subject";
 import {getKeyDatesByPathwayIdAction} from "@/actions/keyDate";
+
 
 
 export async function generateStaticParams() {
@@ -51,16 +48,16 @@ export default async function PageConcours({ params }: { params: { name: string 
                 mb-4">Bibliothèque des cours</h2>
                     <div className="flex flex-row flex-wrap gap-4 mb-8">
                         <Link href={`/concours/${params.name}/math`}>
-                            <SubjectContainer name={"Mathématique"} reactIcon={<BiMath size={64} className="text-blue-900" />}/>
+                            <SubjectContainer name={"Mathématique"} url={"/logo/math.png"} className="text-blue-900" />
                         </Link>
                         <Link href={`/concours/${params.name}/francais`}>
-                            <SubjectContainer name={"Français"} reactIcon={<GiBookmarklet size={64} className="text-purple-800"/>}/>
+                            <SubjectContainer name={"Français"}  url={"/logo/francais.png"}  className="text-purple-800"/>
                         </Link>
                         <Link href={`/concours/${params.name}/anglais`}>
-                            <SubjectContainer name={"Anglais"} reactIcon={<FaFlagUsa size={64} className="text-sky-400"/>}/>
+                            <SubjectContainer name={"Anglais"} url={"/logo/english.png"} className="text-sky-400"/>
                         </Link>
                         <Link href={`/concours/${params.name}/logique`}>
-                            <SubjectContainer name={"Logique"} reactIcon={<TbBulb size={64} className="text-orange-300"/>}/>
+                            <SubjectContainer name={"Logique"}  url={"/logo/logic.png"} className="text-orange-300"/>
                         </Link>
                     </div>
                 </div>
